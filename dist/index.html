@@ -1,25 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>symmDiv2+ | Codeforces Problem Selector</title>
-    
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="style.css">
- 
-
+  <meta charset="UTF-8">
+  <title>Codeforces Problem Selector</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50%' y='60%' font-size='70' text-anchor='middle' dominant-baseline='middle'>🎯</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./style.css">
 
 </head>
 <body class="dark-mode">
@@ -59,6 +47,37 @@
                     </div>
                 </div>
                 
+                <div class="filter-item">
+                    <label for="contest-type">
+                        <i class="fas fa-trophy"></i> Contest Type
+                    </label>
+                    <div class="select-wrapper">
+                        <select id="contest-type">
+                            <option value="any" selected>Any Contest Type</option>
+                            <option value="Div. 1">Div. 1</option>
+                            <option value="Div. 2">Div. 2</option>
+                            <option value="Div. 3">Div. 3</option>
+                            <option value="Div. 4">Div. 4</option>
+                            <option value="Educational Codeforces Round">Educational Round</option>
+                            <option value="Global Round">Global Round</option>
+                            <option value="Hello 20">Hello Round</option>
+                            <option value="Good Bye">Good Bye Round</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+
+                <div class="filter-item tags-filter-item">
+                    <div class="filter-logic-display">
+                        <span class="filter-logic-dot"></span> Filter Logic: <span id="filter-logic-type">OR</span>
+                    </div>
+                    <label>
+                        <i class="fas fa-tags"></i> Tags (Multi-select)
+                    </label>
+                    <div id="tags-container" class="tag-buttons-container glassmorphism-tags">
+                        </div>
+                </div>
+
                 <div class="filter-row">
                     <div class="filter-item">
                         <label for="min-rating">
@@ -66,7 +85,7 @@
                         </label>
                         <div class="input-with-icon">
                             <input type="number" id="min-rating" placeholder="800" min="800" max="3500" value="800" step="100">
-                            <span class="input-icon">✩</span>
+                            <span class="input-icon rating-star">✩</span>
                         </div>
                     </div>
                     
@@ -76,9 +95,22 @@
                         </label>
                         <div class="input-with-icon">
                             <input type="number" id="max-rating" placeholder="3500" min="800" max="3500" value="3500" step="100">
-                            <span class="input-icon">✩</span>
+                            <span class="input-icon rating-star">✩</span>
                         </div>
                     </div>
+                </div>
+
+                <div class="filter-item">
+                    <label for="cf-handle-input">
+                        <i class="fas fa-user"></i> Codeforces Handle (Optional)
+                    </label>
+                    <div class="input-with-button">
+                        <input type="text" id="cf-handle-input" placeholder="Enter your handle">
+                        <button id="load-handle-btn" class="glow-on-hover small-button">
+                            <span class="btn-text">Check</span>
+                        </button>
+                    </div>
+                    <small id="handle-status-message" class="status-message"></small>
                 </div>
             </div>
             
@@ -136,6 +168,9 @@
                         <div class="meta-item">
                             <i class="fas fa-users"></i>
                             <span id="problem-solved-count"></span>
+                        </div>
+                        <div class="meta-item">
+                            <div id="problem-solved-status" class="problem-solved-status"></div>
                         </div>
                     </div>
                     
