@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     // DOM elements
     const problemTypeSelect = document.getElementById('problem-type');
+    const contestTypeSelect = document.getElementById('contest-type');
+    const tagsContainer = document.getElementById('tags-container');
     const minRatingInput = document.getElementById('min-rating');
     const maxRatingInput = document.getElementById('max-rating');
     const generateBtn = document.getElementById('generate-btn');
@@ -19,12 +21,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const difficultyPointer = document.getElementById('difficulty-pointer');
     const difficultyBarFill = document.getElementById('difficulty-bar-fill');
     const lastUpdatedElement = document.getElementById('last-updated');
+    const filterLogicType = document.getElementById('filter-logic-type');
+
+    // New DOM elements for Codeforces handle feature
+    const cfHandleInput = document.getElementById('cf-handle-input');
+    const loadHandleBtn = document.getElementById('load-handle-btn');
+    const handleStatusMessage = document.getElementById('handle-status-message');
+    const problemSolvedStatus = document.getElementById('problem-solved-status');
 
     // Data variables
     let problems = [];
     let filteredProblems = [];
     let currentProblem = null;
     const contestNames = {}; // Cache for contest names
+    let selectedTags = []; // Array to store selected tags
+    let solvedProblemsByUser = new Set(); // Stores problem IDs (contestId-index) solved by the user
+
+    // List of available tags
+    const availableTags = [
+        "2-sat", "binary search", "bitmasks", "brute force", "chinese remainder theorem",
+        "combinatorics", "constructive algorithms", "data structures", "dfs and similar",
+        "divide and conquer", "dp", "dsu", "expression parsing", "fft", "flows", "games",
+        "geometry", "graph matchings", "graphs", "greedy", "hashing", "implementation",
+        "interactive", "math", "matrices", "meet-in-the-middle", "number theory",
+        "probabilities", "schedules", "shortest paths", "sortings", "string suffix structures",
+        "strings", "ternary search", "trees", "two pointers"
+    ];
 
     // --- Utility Functions ---
 
@@ -191,13 +213,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function filterProblems() {
         const problemType = problemTypeSelect.value;
+        const contestType = contestTypeSelect.value;
+        
         const minRating = parseInt(minRatingInput.value) || 800;
         const maxRating = parseInt(maxRatingInput.value) || 3500;
 
         filteredProblems = problems.filter(problem => {
             const typeMatch = problemType === 'random' || problem.index === problemType;
             const ratingMatch = problem.rating && (problem.rating >= minRating && problem.rating <= maxRating);
-            return typeMatch && ratingMatch;
+            
+            // Contest type filtering logic
+            let contestTypeMatch = true;
+            if (contestType !== 'any') {
+                const contestName = contestNames[problem.contestId] || '';
+                contestTypeMatch = contestName.toLowerCase().includes(contestType.toLowerCase());
+            }
+
+            // Tag filtering logic for multi-select (OR logic)
+            let tagMatch = true;
+            if (selectedTags.length > 0) {
+                if (!problem.tags || problem.tags.length === 0) {
+                    tagMatch = false; // Problem has no tags but user has selected tags
+                } else {
+                    // Check if problem has AT LEAST ONE of the selected tags
+                    tagMatch = selectedTags.some(selectedTag =>
+                        problem.tags.some(problemTag =>
+                            problemTag.toLowerCase() === selectedTag.toLowerCase()
+                        )
+                    );
+                }
+            }
+
+            return typeMatch && ratingMatch && contestTypeMatch && tagMatch; // Combine all matches
         });
 
         filteredProblemsElement.textContent = filteredProblems.length;
@@ -216,6 +263,8 @@ document.addEventListener('DOMContentLoaded', function() {
             problemTagsContainer.innerHTML = '<span style="color: #888;">Adjust filters to find problems.</span>';
             problemLink.href = '#';
             updateDifficultyPointer(null);
+            problemSolvedStatus.className = 'problem-solved-status'; // Clear previous classes
+            problemSolvedStatus.textContent = ''; // Clear text
             return;
         }
 
@@ -226,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
         problemTypeBadge.textContent = currentProblem.index;
         problemTypeBadge.className = `problem-type-badge problem-type-${currentProblem.index}`;
         problemContestId.textContent = `${getFormattedContestName(currentProblem.contestId)} / ID: ${currentProblem.contestId}${currentProblem.index}`;
-        problemRating.textContent = `Rating: ${currentProblem.rating}`; // Display rating here, pointer adds category
+        problemRating.textContent = `Rating: ${currentProblem.rating}`;
         problemSolvedCount.textContent = `Solved: ${currentProblem.solvedCount.toLocaleString()}`;
         problemLink.href = `https://codeforces.com/contest/${currentProblem.contestId}/problem/${currentProblem.index}`;
 
@@ -244,18 +293,113 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         updateDifficultyPointer(currentProblem.rating);
+        updateProblemSolvedStatus(); // Call new function to update solved status
 
         problemDisplay.classList.remove('animate__fadeInUp');
-        void problemDisplay.offsetWidth;
+        void problemDisplay.offsetWidth; // Trigger reflow
         problemDisplay.classList.add('animate__fadeInUp');
     }
 
-    // --- Event Listeners ---
+    // --- Codeforces Handle Logic ---
+    async function fetchUserSubmissions(handle) {
+        handleStatusMessage.textContent = 'Checking handle...';
+        handleStatusMessage.className = 'status-message'; // Reset classes
+
+        try {
+            // Fetch submissions from Codeforces API for the given handle
+            // We only need accepted submissions to mark problems as solved
+            const response = await fetch(`https://codeforces.com/api/user.status?handle=${handle}&from=1&count=100000`); // Fetch a large number of submissions
+            const data = await response.json();
+
+            if (data.status === 'OK') {
+                solvedProblemsByUser.clear(); // Clear previous data
+                data.result.forEach(submission => {
+                    // Only consider accepted submissions
+                    if (submission.verdict === 'OK' && submission.problem) {
+                        const problemKey = `${submission.problem.contestId}-${submission.problem.index}`;
+                        solvedProblemsByUser.add(problemKey);
+                    }
+                });
+                handleStatusMessage.textContent = `Handle "${handle}" loaded. (${solvedProblemsByUser.size} problems solved)`;
+                handleStatusMessage.classList.add('success');
+                updateProblemSolvedStatus(); // Update status for currently displayed problem
+            } else {
+                throw new Error(data.comment || 'Failed to fetch user submissions.');
+            }
+        } catch (error) {
+            console.error('Error fetching user submissions:', error);
+            solvedProblemsByUser.clear(); // Clear solved problems on error
+            handleStatusMessage.textContent = `Error: ${error.message}`;
+            handleStatusMessage.classList.add('error');
+            updateProblemSolvedStatus(); // Update status for currently displayed problem to reflect no handle loaded
+        }
+    }
+
+    function updateProblemSolvedStatus() {
+        if (!currentProblem || solvedProblemsByUser.size === 0) {
+            problemSolvedStatus.textContent = 'Login to check solved status';
+            problemSolvedStatus.className = 'problem-solved-status'; // Reset class
+            return;
+        }
+
+        const problemKey = `${currentProblem.contestId}-${currentProblem.index}`;
+        if (solvedProblemsByUser.has(problemKey)) {
+            problemSolvedStatus.textContent = 'Solved';
+            problemSolvedStatus.className = 'problem-solved-status solved';
+        } else {
+            problemSolvedStatus.textContent = 'Unsolved';
+            problemSolvedStatus.className = 'problem-solved-status unsolved';
+        }
+    }
+
+    // --- Tag Initialization and Event Listener ---
+
+    function initializeTags() {
+        tagsContainer.innerHTML = ''; // Clear existing tags
+        availableTags.forEach(tag => {
+            const tagSpan = document.createElement('span');
+            tagSpan.textContent = tag;
+            tagSpan.classList.add('tag-button');
+            tagSpan.setAttribute('data-tag', tag.toLowerCase()); // Store tag value in data attribute
+            tagsContainer.appendChild(tagSpan);
+        });
+
+        tagsContainer.addEventListener('click', function(event) {
+            const clickedTag = event.target;
+            if (clickedTag.classList.contains('tag-button')) {
+                const tagValue = clickedTag.getAttribute('data-tag');
+                
+                if (clickedTag.classList.contains('selected')) {
+                    // Deselect tag
+                    clickedTag.classList.remove('selected');
+                    selectedTags = selectedTags.filter(tag => tag !== tagValue);
+                } else {
+                    // Select tag
+                    clickedTag.classList.add('selected');
+                    selectedTags.push(tagValue);
+                }
+                filterProblems();
+                if (problemDisplay.classList.contains('hidden') && filteredProblems.length > 0) {
+                    generateProblem();
+                } else if (currentProblem) { // If a problem is already displayed, re-check filters and update
+                    generateProblem(); // Re-generate to ensure it still matches new filters, or get a new one
+                }
+            }
+        });
+    }
+
+    // --- Event Listeners for Filters and Handle ---
 
     generateBtn.addEventListener('click', generateProblem);
     nextBtn.addEventListener('click', generateProblem);
 
     problemTypeSelect.addEventListener('change', () => {
+        filterProblems();
+        if (problemDisplay.classList.contains('hidden') && filteredProblems.length > 0) {
+            generateProblem();
+        }
+    });
+    contestTypeSelect.addEventListener('change', () => {
         filterProblems();
         if (problemDisplay.classList.contains('hidden') && filteredProblems.length > 0) {
             generateProblem();
@@ -274,6 +418,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Initial data fetch when the page loads
-    fetchAllData();
+    // Event listener for Codeforces handle button
+    loadHandleBtn.addEventListener('click', () => {
+        const handle = cfHandleInput.value.trim();
+        if (handle) {
+            fetchUserSubmissions(handle);
+        } else {
+            handleStatusMessage.textContent = 'Please enter a Codeforces handle.';
+            handleStatusMessage.classList.add('error');
+            solvedProblemsByUser.clear(); // Clear previously loaded data if handle is empty
+            updateProblemSolvedStatus(); // Update status for currently displayed problem
+        }
+    });
+
+    // Initial calls
+    initializeTags(); // Populate tag buttons
+    fetchAllData(); // Fetch problem data
 });
