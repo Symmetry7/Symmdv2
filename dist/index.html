@@ -18,10 +18,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="style.css">
-    <!-- Matomo -->
+  <!-- Matomo -->
 <script>
   var _paq = window._paq = window._paq || [];
   /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+  _paq.push(["setCookieDomain", "*.symmdv2.vercel.app"]);
+  _paq.push(["setDomains", ["*.symmdv2.vercel.app"]]);
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function() {
@@ -32,7 +35,9 @@
     g.async=true; g.src='https://cdn.matomo.cloud/symmdv2vercelapp.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
   })();
 </script>
+<noscript><p><img referrerpolicy="no-referrer-when-downgrade" src="https://symmdv2vercelapp.matomo.cloud/matomo.php?idsite=1&amp;rec=1" style="border:0;" alt="" /></p></noscript>
 <!-- End Matomo Code -->
+
 
 </head>
 <body class="dark-mode">
