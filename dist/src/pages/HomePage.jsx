@@ -130,11 +130,11 @@ function HomePage() {
   }, [state.selectedTags, state.filters]);
 
   return (
-    <div className="min-h-screen pt-20 pb-12">
+    <div className="min-h-screen pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <motion.div
-          className="text-center mb-12"
+          className="text-center mb-8"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -168,13 +168,19 @@ function HomePage() {
         </motion.div>
 
         {/* User Handle Section */}
-        <UserHandleSection />
+        <div className="mb-6">
+          <UserHandleSection />
+        </div>
 
         {/* Platform Tabs */}
-        <PlatformTabs />
+        <div className="mb-6">
+          <PlatformTabs />
+        </div>
 
         {/* Filter Section */}
-        <FilterSection showTags={showTags} setShowTags={setShowTags} />
+        <div className="mb-6">
+          <FilterSection showTags={showTags} setShowTags={setShowTags} />
+        </div>
 
         {/* Tags Input */}
         <AnimatePresence>
@@ -201,7 +207,7 @@ function HomePage() {
 
         {/* Generate Button */}
         <motion.div
-          className="flex flex-col items-center gap-6 mb-12"
+          className="flex flex-col items-center gap-4 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.6 }}
