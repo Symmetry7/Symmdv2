@@ -11,6 +11,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import apiServices from "../services/apiServices";
 import ProblemCard from "../components/ProblemCard";
 
 function PracticePage() {
@@ -24,18 +25,22 @@ function PracticePage() {
       {
         id: "A",
         name: "Implementation & Logic",
-        description: "Basic implementation, simple math, and logical thinking",
+        description:
+          "Master the fundamentals: basic implementation, simple math, and logical thinking. Perfect for building coding confidence!",
         color: "from-green-500 to-emerald-500",
         icon: "🎯",
         ratingRange: "800-1200",
+        tips: "Focus on: Reading comprehension, basic loops, conditionals, string manipulation",
       },
       {
         id: "B",
         name: "Mathematical & Greedy",
-        description: "Number theory, combinatorics, and greedy algorithms",
+        description:
+          "Develop mathematical intuition with number theory, combinatorics, and greedy algorithms",
         color: "from-blue-500 to-cyan-500",
         icon: "🧮",
         ratingRange: "900-1400",
+        tips: "Key topics: GCD/LCM, modular arithmetic, prime numbers, optimal choices",
       },
       {
         id: "C",
@@ -159,25 +164,43 @@ function PracticePage() {
     loadPracticeProblems();
   }, [selectedCategory, selectedPlatform]);
 
-  const loadPracticeProblems = () => {
-    // Filter problems based on selected category and platform
-    const allProblems = state.platforms[selectedPlatform].problems;
+  const loadPracticeProblems = async () => {
+    try {
+      // Get curated problem sets for focused practice
+      const curatedProblems = apiServices.getCuratedProblemSet(
+        selectedPlatform,
+        selectedCategory,
+        50,
+      );
 
-    let filtered = allProblems.filter((problem) => {
-      if (selectedPlatform === "codeforces") {
-        return problem.index === selectedCategory;
-      } else if (selectedPlatform === "leetcode") {
-        return problem.difficulty === selectedCategory;
-      } else if (selectedPlatform === "codechef") {
-        return problem.difficulty === selectedCategory;
+      // If we have platform data, filter from there, otherwise use curated set
+      let problems = [];
+      const platformProblems = state.platforms[selectedPlatform].problems;
+
+      if (platformProblems.length > 0) {
+        problems = platformProblems.filter((problem) => {
+          if (selectedPlatform === "codeforces") {
+            return problem.index === selectedCategory;
+          } else if (selectedPlatform === "leetcode") {
+            return problem.difficulty === selectedCategory;
+          } else if (selectedPlatform === "codechef") {
+            return problem.difficulty === selectedCategory;
+          }
+          return false;
+        });
+      } else {
+        problems = curatedProblems;
       }
-      return false;
-    });
 
-    // Sort by difficulty (rating) or solved count
-    filtered.sort((a, b) => (a.rating || 0) - (b.rating || 0));
+      // Sort by difficulty (rating) for progressive learning
+      problems.sort((a, b) => (a.rating || 0) - (b.rating || 0));
 
-    setPracticeProblems(filtered);
+      // Limit to 50 high-quality problems for focused practice
+      setPracticeProblems(problems.slice(0, 50));
+    } catch (error) {
+      console.error("Error loading practice problems:", error);
+      setPracticeProblems([]);
+    }
   };
 
   const currentCategories = difficultyCategories[selectedPlatform] || [];
