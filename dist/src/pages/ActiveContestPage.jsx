@@ -21,6 +21,7 @@ function ActiveContestPage() {
   const [timeLeft, setTimeLeft] = useState(7200); // 2 hours in seconds
   const [submissions, setSubmissions] = useState({});
   const [showTags, setShowTags] = useState({});
+  const [showToast, setShowToast] = useState(null);
 
   useEffect(() => {
     // Mock contest data - in real app, fetch from API/localStorage
@@ -170,9 +171,26 @@ function ActiveContestPage() {
     return newWindow;
   };
 
+  const showToastMessage = (message, type = "info") => {
+    setShowToast({ message, type });
+    setTimeout(() => setShowToast(null), 3000);
+  };
+
   const handleSubmit = (problemId, problemUrl) => {
     // Open the platform's submit page in full screen
-    openProblemFullScreen(problemUrl);
+    const opened = openProblemFullScreen(problemUrl);
+
+    if (opened) {
+      showToastMessage(
+        "Problem opened in full screen! Submit your solution there.",
+        "success",
+      );
+    } else {
+      showToastMessage(
+        "Please allow pop-ups to open the problem page.",
+        "warning",
+      );
+    }
 
     // Mark as attempted
     setSubmissions((prev) => ({
@@ -187,7 +205,16 @@ function ActiveContestPage() {
 
   const handleViewProblem = (problemUrl) => {
     // Open problem in full screen
-    openProblemFullScreen(problemUrl);
+    const opened = openProblemFullScreen(problemUrl);
+
+    if (opened) {
+      showToastMessage("Problem opened in full screen!", "success");
+    } else {
+      showToastMessage(
+        "Please allow pop-ups to open the problem page.",
+        "warning",
+      );
+    }
   };
 
   const markAsSolved = (problemId) => {
@@ -199,6 +226,7 @@ function ActiveContestPage() {
         solvedAt: Date.now(),
       },
     }));
+    showToastMessage("Problem marked as solved! 🎉", "success");
   };
 
   const toggleTags = (problemId) => {
