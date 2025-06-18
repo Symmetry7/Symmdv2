@@ -3,6 +3,8 @@ import React, { createContext, useContext, useReducer, useEffect } from "react";
 const AppContext = createContext();
 
 const initialState = {
+  user: null,
+  isAuthenticated: false,
   currentPlatform: "codeforces",
   platforms: {
     codeforces: {
@@ -134,6 +136,20 @@ const initialState = {
 
 function appReducer(state, action) {
   switch (action.type) {
+    case "SET_USER":
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: !!action.payload,
+      };
+
+    case "LOGOUT":
+      return {
+        ...state,
+        user: null,
+        isAuthenticated: false,
+      };
+
     case "SET_PLATFORM":
       return { ...state, currentPlatform: action.payload };
 
