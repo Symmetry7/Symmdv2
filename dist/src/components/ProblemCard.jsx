@@ -7,8 +7,8 @@ import {
   CheckCircle,
   Clock,
   Code,
-  Laptop,
-  ChefHat,
+  Monitor,
+  UtensilsCrossed,
   Bookmark,
   Share2,
 } from "lucide-react";
@@ -18,8 +18,12 @@ function ProblemCard({ problem, compact = false }) {
 
   const platformIcons = {
     codeforces: { icon: Code, color: "text-blue-500", bg: "bg-blue-500" },
-    leetcode: { icon: Laptop, color: "text-orange-500", bg: "bg-orange-500" },
-    codechef: { icon: ChefHat, color: "text-amber-600", bg: "bg-amber-600" },
+    leetcode: { icon: Monitor, color: "text-orange-500", bg: "bg-orange-500" },
+    codechef: {
+      icon: UtensilsCrossed,
+      color: "text-amber-600",
+      bg: "bg-amber-600",
+    },
   };
 
   const PlatformIcon = platformIcons[problem.platform]?.icon || Code;
