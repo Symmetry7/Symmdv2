@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ExternalLink,
@@ -11,9 +11,13 @@ import {
   UtensilsCrossed,
   Bookmark,
   Share2,
+  EyeOff,
+  Eye,
 } from "lucide-react";
 
-function ProblemCard({ problem, compact = false }) {
+function ProblemCard({ problem, compact = false, onNextProblem }) {
+  const [showTags, setShowTags] = useState(true);
+
   if (!problem) return null;
 
   const platformIcons = {
@@ -197,19 +201,45 @@ function ProblemCard({ problem, compact = false }) {
         {/* Tags */}
         {problem.tags && problem.tags.length > 0 && (
           <div className="p-6 border-b border-white/20 dark:border-gray-700/20">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">
-              Topics
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {problem.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-lg text-sm font-medium"
-                >
-                  {tag}
-                </span>
-              ))}
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+                Topics
+              </h3>
+              <motion.button
+                onClick={() => setShowTags(!showTags)}
+                className="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {showTags ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
+                {showTags ? "Hide Tags" : "Show Tags"}
+              </motion.button>
             </div>
+            {showTags && (
+              <motion.div
+                className="flex flex-wrap gap-2"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {problem.tags.map((tag, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.05, duration: 0.2 }}
+                    className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-lg text-sm font-medium hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors cursor-pointer"
+                  >
+                    {tag}
+                  </motion.span>
+                ))}
+              </motion.div>
+            )}
           </div>
         )}
 
@@ -229,9 +259,7 @@ function ProblemCard({ problem, compact = false }) {
             </motion.a>
 
             <motion.button
-              onClick={() =>
-                window.dispatchEvent(new CustomEvent("generateNextProblem"))
-              }
+              onClick={onNextProblem}
               className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
