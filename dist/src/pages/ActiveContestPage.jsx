@@ -640,34 +640,74 @@ function ActiveContestPage() {
                       <div className="flex items-start gap-2">
                         <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
                         <div className="text-sm text-blue-800 dark:text-blue-200">
-                          <p className="font-medium mb-1">
+                          <p className="font-medium mb-2">
                             Contest Instructions:
                           </p>
-                          <ul className="list-disc list-inside space-y-1 text-xs">
-                            <li>
-                              <strong>"View Problem (Full Screen)"</strong> -
-                              Opens problem in full screen for better reading
-                            </li>
-                            <li>
-                              <strong>"Submit Solution"</strong> - Opens
-                              platform's submit page in full screen
-                            </li>
-                            <li>
-                              If pop-ups are blocked, manually allow them in
-                              your browser
-                            </li>
-                            <li>
-                              Solve and submit on the platform, then return here
-                            </li>
-                            <li>
-                              Click <strong>"Mark as Solved"</strong> when you
-                              successfully submit
-                            </li>
-                            <li>
-                              Your progress is automatically saved every few
-                              seconds
-                            </li>
-                          </ul>
+                          <div className="space-y-2">
+                            <div>
+                              <p className="font-medium text-xs mb-1">
+                                Button Actions:
+                              </p>
+                              <ul className="list-disc list-inside space-y-1 text-xs ml-2">
+                                <li>
+                                  <strong>"View Problem (Full Screen)"</strong>{" "}
+                                  - Opens problem in full screen for better
+                                  reading
+                                </li>
+                                <li>
+                                  <strong>"Submit Solution"</strong> - Opens
+                                  platform's submit page in full screen
+                                </li>
+                                <li>
+                                  <strong>"Mark as Solved"</strong> when you
+                                  successfully submit your solution
+                                </li>
+                              </ul>
+                            </div>
+                            <div>
+                              <p className="font-medium text-xs mb-1">
+                                Keyboard Shortcuts:
+                              </p>
+                              <ul className="list-disc list-inside space-y-1 text-xs ml-2">
+                                <li>
+                                  <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
+                                    ←→
+                                  </kbd>{" "}
+                                  Navigate between problems
+                                </li>
+                                <li>
+                                  <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
+                                    V
+                                  </kbd>{" "}
+                                  View problem
+                                </li>
+                                <li>
+                                  <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
+                                    S
+                                  </kbd>{" "}
+                                  Submit solution
+                                </li>
+                                <li>
+                                  <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">
+                                    M
+                                  </kbd>{" "}
+                                  Mark as solved
+                                </li>
+                              </ul>
+                            </div>
+                            <div>
+                              <ul className="list-disc list-inside space-y-1 text-xs">
+                                <li>
+                                  If pop-ups are blocked, manually allow them in
+                                  your browser
+                                </li>
+                                <li>
+                                  Your progress is automatically saved every few
+                                  seconds
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
