@@ -31,14 +31,6 @@ function HomePage() {
     loadPlatformData();
   }, [state.currentPlatform]);
 
-  useEffect(() => {
-    // Listen for next problem events
-    const handleNextProblem = () => generateProblem();
-    window.addEventListener("generateNextProblem", handleNextProblem);
-    return () =>
-      window.removeEventListener("generateNextProblem", handleNextProblem);
-  }, []);
-
   const loadPlatformData = async () => {
     dispatch({ type: "SET_LOADING", payload: true });
 
@@ -268,7 +260,10 @@ function HomePage() {
               message={`Loading ${state.currentPlatform.charAt(0).toUpperCase() + state.currentPlatform.slice(1)} problems...`}
             />
           ) : state.currentProblem ? (
-            <ProblemCard problem={state.currentProblem} />
+            <ProblemCard
+              problem={state.currentProblem}
+              onNextProblem={generateProblem}
+            />
           ) : (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
