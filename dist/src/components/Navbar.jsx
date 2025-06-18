@@ -1,14 +1,15 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Sun, Moon, Zap, Home, Target, BarChart3 } from "lucide-react";
+import { Sun, Moon, Zap, Home, Target, BarChart3, Trophy } from "lucide-react";
 
 function Navbar({ darkMode, toggleTheme }) {
   const location = useLocation();
 
   const navItems = [
-    { path: "/", icon: Home, label: "Generator" },
-    { path: "/practice", icon: Target, label: "Practice" },
+    { path: "/dashboard", icon: Home, label: "Dashboard" },
+    { path: "/generator", icon: Target, label: "Generator" },
+    { path: "/contests", icon: Trophy, label: "Contests" },
     { path: "/stats", icon: BarChart3, label: "Stats" },
   ];
 
