@@ -9,6 +9,7 @@ import {
   Target,
   BarChart3,
   Trophy,
+  Users,
   User,
   LogOut,
   ChevronDown,
@@ -36,6 +37,7 @@ function Navbar({ darkMode, toggleTheme, user, onLogout }) {
     { path: "/dashboard", icon: Home, label: "Dashboard" },
     { path: "/generator", icon: Target, label: "Generator" },
     { path: "/contests", icon: Trophy, label: "Contests" },
+    { path: "/community", icon: Users, label: "Community" },
     { path: "/stats", icon: BarChart3, label: "Stats" },
   ];
 
