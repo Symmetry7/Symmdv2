@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Code, Laptop, ChefHat } from "lucide-react";
+import { Code, Monitor, UtensilsCrossed } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
 function PlatformTabs() {
@@ -18,7 +18,7 @@ function PlatformTabs() {
     {
       id: "leetcode",
       name: "LeetCode",
-      icon: Laptop,
+      icon: Monitor,
       color: "from-orange-500 to-orange-600",
       description: "Technical interviews",
       count: state.platforms.leetcode.problems.length,
@@ -26,7 +26,7 @@ function PlatformTabs() {
     {
       id: "codechef",
       name: "CodeChef",
-      icon: ChefHat,
+      icon: UtensilsCrossed,
       color: "from-amber-600 to-amber-700",
       description: "Programming contests",
       count: state.platforms.codechef.problems.length,
