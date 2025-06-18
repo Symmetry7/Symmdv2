@@ -16,112 +16,103 @@ import {
 import { Link } from "react-router-dom";
 
 function ContestsPage() {
-  const [activeTab, setActiveTab] = useState("ongoing");
+  const [activeTab, setActiveTab] = useState("my");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterPlatform, setFilterPlatform] = useState("all");
   const [contests, setContests] = useState({
-    ongoing: [],
-    upcoming: [],
-    past: [],
     my: [],
+    community: [],
+    completed: [],
   });
 
   useEffect(() => {
-    // Mock contest data
+    // Load user's contests from localStorage
+    const savedContests = localStorage.getItem("symmdiv2-contests");
+    const userContests = savedContests ? JSON.parse(savedContests) : [];
+
+    // Mock contest data - focus on user-created contests
     setContests({
-      ongoing: [
-        {
-          id: 1,
-          title: "Weekly Practice Contest #15",
-          creator: "CodeMaster",
-          participants: 127,
-          timeLeft: "2h 34m",
-          startTime: "2024-01-15 14:00",
-          duration: "3h",
-          problems: 5,
-          platforms: ["codeforces", "leetcode"],
-          difficulty: "Medium",
-          status: "running",
-        },
-        {
-          id: 2,
-          title: "Div2 Training Round",
-          creator: "AlgoExpert",
-          participants: 89,
-          timeLeft: "1h 15m",
-          startTime: "2024-01-15 15:30",
-          duration: "2h",
-          problems: 4,
-          platforms: ["codeforces"],
-          difficulty: "Hard",
-          status: "running",
-        },
-      ],
-      upcoming: [
-        {
-          id: 3,
-          title: "Dynamic Programming Marathon",
-          creator: "DPMaster",
-          participants: 45,
-          startsIn: "3h 20m",
-          startTime: "2024-01-15 20:00",
-          duration: "4h",
-          problems: 8,
-          platforms: ["codeforces", "codechef"],
-          difficulty: "Expert",
-          status: "scheduled",
-        },
-        {
-          id: 4,
-          title: "Beginner Friendly Contest",
-          creator: "NewbieFriend",
-          participants: 234,
-          startsIn: "1d 5h",
-          startTime: "2024-01-16 14:00",
-          duration: "2h",
-          problems: 6,
-          platforms: ["leetcode"],
-          difficulty: "Easy",
-          status: "scheduled",
-        },
-      ],
-      past: [
-        {
-          id: 5,
-          title: "Graph Theory Challenge",
-          creator: "GraphGuru",
-          participants: 156,
-          endTime: "2024-01-14 18:00",
-          duration: "3h",
-          problems: 6,
-          platforms: ["codeforces", "codechef"],
-          difficulty: "Hard",
-          status: "finished",
-          winner: "tourist_fan",
-        },
-      ],
       my: [
         {
-          id: 6,
+          id: "contest-1",
           title: "My Daily Practice",
           creator: "You",
-          participants: 12,
-          lastActive: "2 days ago",
+          participants: 1,
+          createdAt: "2024-01-15",
           duration: "2h",
           problems: 5,
           platforms: ["codeforces"],
           difficulty: "Medium",
           status: "draft",
+          description: "Personal practice contest for graph problems",
+        },
+        {
+          id: "contest-2",
+          title: "Weekly DP Challenge",
+          creator: "You",
+          participants: 3,
+          createdAt: "2024-01-14",
+          duration: "3h",
+          problems: 8,
+          platforms: ["codeforces", "leetcode"],
+          difficulty: "Hard",
+          status: "active",
+          description: "Dynamic programming focused contest",
+        },
+        ...userContests,
+      ],
+      community: [
+        {
+          id: "community-1",
+          title: "Beginner Friendly Contest",
+          creator: "CommunityModerator",
+          participants: 45,
+          createdAt: "2024-01-13",
+          duration: "2h",
+          problems: 6,
+          platforms: ["leetcode"],
+          difficulty: "Easy",
+          status: "active",
+          description: "Perfect for beginners to competitive programming",
+        },
+        {
+          id: "community-2",
+          title: "Math Problems Galore",
+          creator: "MathExpert",
+          participants: 67,
+          createdAt: "2024-01-12",
+          duration: "2.5h",
+          problems: 7,
+          platforms: ["codeforces", "codechef"],
+          difficulty: "Medium",
+          status: "active",
+          description: "Mathematical problem solving contest",
+        },
+      ],
+      completed: [
+        {
+          id: "completed-1",
+          title: "Graph Theory Challenge",
+          creator: "GraphGuru",
+          participants: 156,
+          completedAt: "2024-01-10",
+          duration: "3h",
+          problems: 6,
+          platforms: ["codeforces", "codechef"],
+          difficulty: "Hard",
+          status: "completed",
+          description: "Advanced graph algorithms and data structures",
+          myRank: 23,
+          totalParticipants: 156,
         },
       ],
     });
   }, []);
 
   const tabs = [
-    { id: "ongoing", label: "Live Contests", count: contests.ongoing.length },
-    { id: "upcoming", label: "Upcoming", count: contests.upcoming.length },
-    { id: "past", label: "Past", count: contests.past.length },
     { id: "my", label: "My Contests", count: contests.my.length },
+    { id: "community", label: "Community", count: contests.community.length },
+    { id: "completed", label: "Completed", count: contests.completed.length },
   ];
 
   const platformColors = {
@@ -371,32 +362,21 @@ function ContestsPage() {
 
                       {/* Time Info */}
                       <div className="text-sm text-gray-600 dark:text-gray-400">
-                        {contest.timeLeft && (
+                        {contest.createdAt && (
                           <p>
-                            ⏰ Time left:{" "}
-                            <span className="font-medium text-red-500">
-                              {contest.timeLeft}
-                            </span>
+                            📅 Created:{" "}
+                            {new Date(contest.createdAt).toLocaleDateString()}
                           </p>
                         )}
-                        {contest.startsIn && (
+                        {contest.completedAt && (
                           <p>
-                            🕐 Starts in:{" "}
-                            <span className="font-medium text-blue-500">
-                              {contest.startsIn}
-                            </span>
+                            ✅ Completed:{" "}
+                            {new Date(contest.completedAt).toLocaleDateString()}
                           </p>
                         )}
-                        {contest.endTime && <p>✅ Ended: {contest.endTime}</p>}
-                        {contest.lastActive && (
-                          <p>📝 Last modified: {contest.lastActive}</p>
-                        )}
-                        {contest.winner && (
-                          <p>
-                            🏆 Winner:{" "}
-                            <span className="font-medium text-yellow-500">
-                              {contest.winner}
-                            </span>
+                        {contest.description && (
+                          <p className="mt-2 text-gray-700 dark:text-gray-300">
+                            {contest.description}
                           </p>
                         )}
                       </div>
@@ -404,37 +384,60 @@ function ContestsPage() {
 
                     {/* Action Buttons */}
                     <div className="flex flex-col gap-2 ml-6">
-                      {contest.status === "running" && (
+                      {contest.status === "active" && (
                         <Link to={`/contests/${contest.id}/participate`}>
                           <button className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors">
-                            Join Now
+                            Start Contest
                           </button>
                         </Link>
                       )}
-                      {contest.status === "scheduled" && (
-                        <button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
-                          Register
-                        </button>
+                      {contest.status === "draft" && activeTab === "my" && (
+                        <div className="flex gap-2">
+                          <Link to={`/contests/create?edit=${contest.id}`}>
+                            <button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
+                              Edit
+                            </button>
+                          </Link>
+                          <button
+                            onClick={() => {
+                              // Start the contest
+                              const updatedContests = { ...contests };
+                              const contestIndex = updatedContests.my.findIndex(
+                                (c) => c.id === contest.id,
+                              );
+                              if (contestIndex !== -1) {
+                                updatedContests.my[contestIndex].status =
+                                  "active";
+                                setContests(updatedContests);
+                              }
+                            }}
+                            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors"
+                          >
+                            Start
+                          </button>
+                        </div>
                       )}
-                      {contest.status === "finished" && (
-                        <Link to={`/contests/${contest.id}/results`}>
+                      {contest.status === "completed" && (
+                        <div className="text-right">
+                          {contest.myRank && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                              Your rank: #{contest.myRank}/
+                              {contest.totalParticipants}
+                            </p>
+                          )}
                           <button className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors">
                             View Results
                           </button>
-                        </Link>
+                        </div>
                       )}
-                      {contest.status === "draft" && (
-                        <Link to={`/contests/${contest.id}/edit`}>
-                          <button className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-colors">
-                            Edit
-                          </button>
-                        </Link>
-                      )}
-                      <Link to={`/contests/${contest.id}`}>
-                        <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg font-medium transition-colors">
-                          View Details
-                        </button>
-                      </Link>
+                      {activeTab === "community" &&
+                        contest.status === "active" && (
+                          <Link to={`/contests/${contest.id}/participate`}>
+                            <button className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors">
+                              Join Contest
+                            </button>
+                          </Link>
+                        )}
                     </div>
                   </div>
                 </motion.div>
