@@ -9,6 +9,8 @@ import HomePage from "./pages/HomePage";
 import ContestsPage from "./pages/ContestsPage";
 import CreateContestPage from "./pages/CreateContestPage";
 import ActiveContestPage from "./pages/ActiveContestPage";
+import ProfilePage from "./pages/ProfilePage";
+import CommunityPage from "./pages/CommunityPage";
 import StatsPage from "./pages/StatsPage";
 import BackgroundElements from "./components/BackgroundElements";
 import { AppProvider } from "./context/AppContext";
@@ -191,6 +193,42 @@ function App() {
                       transition={{ duration: 0.3 }}
                     >
                       <ActiveContestPage />
+                    </motion.div>
+                  ) : (
+                    <Navigate to="/login" replace />
+                  )
+                }
+              />
+
+              <Route
+                path="/profile"
+                element={
+                  isAuthenticated ? (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ProfilePage />
+                    </motion.div>
+                  ) : (
+                    <Navigate to="/login" replace />
+                  )
+                }
+              />
+
+              <Route
+                path="/community"
+                element={
+                  isAuthenticated ? (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <CommunityPage />
                     </motion.div>
                   ) : (
                     <Navigate to="/login" replace />
