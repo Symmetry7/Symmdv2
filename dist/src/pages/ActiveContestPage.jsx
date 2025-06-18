@@ -589,27 +589,37 @@ function ActiveContestPage() {
                     </div>
 
                     {/* Contest Instructions */}
-                    <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                    <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
                       <div className="flex items-start gap-2">
-                        <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
-                        <div className="text-sm text-yellow-800 dark:text-yellow-200">
+                        <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                        <div className="text-sm text-blue-800 dark:text-blue-200">
                           <p className="font-medium mb-1">
                             Contest Instructions:
                           </p>
                           <ul className="list-disc list-inside space-y-1 text-xs">
                             <li>
-                              Click "Submit Solution" to open the problem on the
-                              original platform
+                              <strong>"View Problem (Full Screen)"</strong> -
+                              Opens problem in full screen for better reading
                             </li>
                             <li>
-                              Solve the problem on the platform and submit your
-                              code
+                              <strong>"Submit Solution"</strong> - Opens
+                              platform's submit page in full screen
                             </li>
                             <li>
-                              Return here and click "Mark as Solved" when you
+                              If pop-ups are blocked, manually allow them in
+                              your browser
+                            </li>
+                            <li>
+                              Solve and submit on the platform, then return here
+                            </li>
+                            <li>
+                              Click <strong>"Mark as Solved"</strong> when you
                               successfully submit
                             </li>
-                            <li>Your progress is automatically saved</li>
+                            <li>
+                              Your progress is automatically saved every few
+                              seconds
+                            </li>
                           </ul>
                         </div>
                       </div>
