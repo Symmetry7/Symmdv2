@@ -44,6 +44,13 @@ function App() {
   const isOnboardingRoute = location.pathname === "/onboarding";
   const shouldShowNavbar = hasCompletedOnboarding && !isOnboardingRoute;
 
+  // Debug logging for development
+  useEffect(() => {
+    console.log("Current route:", location.pathname);
+    console.log("Has completed onboarding:", hasCompletedOnboarding);
+    console.log("Should show navbar:", shouldShowNavbar);
+  }, [location.pathname, hasCompletedOnboarding, shouldShowNavbar]);
+
   return (
     <AppProvider>
       <div
