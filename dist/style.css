@@ -469,6 +469,47 @@ body.dark-theme .theme-toggle .fa-sun {
   margin-bottom: 3rem;
 }
 
+/* User Handle Top Section */
+.user-handle-top {
+  background: var(--bg-card);
+  backdrop-filter: var(--blur-md);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-2xl);
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  transition: var(--transition-normal);
+}
+
+.user-handle-top:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+.handle-container {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.handle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  justify-content: center;
+}
+
+.handle-label i {
+  color: var(--accent-primary);
+  font-size: 1.25rem;
+}
+
 .filter-grid {
   display: grid;
   gap: 2rem;
