@@ -116,82 +116,126 @@
       <section
         class="filter-section animate__animated animate__fadeIn animate__delay-1s"
       >
+        <!-- User Handle Section (Top) -->
+        <div class="user-handle-top">
+          <div class="handle-container">
+            <label class="handle-label">
+              <i class="fas fa-user-circle"></i>
+              User Handle
+            </label>
+            <div class="handle-input-group">
+              <div class="input-container">
+                <input
+                  type="text"
+                  id="user-handle"
+                  placeholder="Enter your handle (optional)"
+                />
+                <button class="handle-check-btn" id="handle-check-btn">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+              <div class="handle-status" id="handle-status"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="filter-grid">
           <!-- Platform-specific filters -->
           <div class="filter-group" id="codeforces-filters">
-            <div class="filter-row">
-              <div class="filter-item">
-                <label class="filter-label">
-                  <i class="fas fa-layer-group"></i>
-                  Problem Type
-                </label>
-                <div class="select-container">
-                  <select id="cf-problem-type">
-                    <option value="random">Random (A-G)</option>
-                    <option value="A">A - Implementation</option>
-                    <option value="B">B - Math & Logic</option>
-                    <option value="C">C - Data Structures</option>
-                    <option value="D">D - Algorithms</option>
-                    <option value="E">E - Advanced</option>
-                    <option value="F">F - Expert</option>
-                    <option value="G">G - Master</option>
-                  </select>
-                  <i class="fas fa-chevron-down select-arrow"></i>
-                </div>
-              </div>
-              <div class="filter-item">
-                <label class="filter-label">
-                  <i class="fas fa-trophy"></i>
-                  Contest Type
-                </label>
-                <div class="select-container">
-                  <select id="cf-contest-type">
-                    <option value="any">Any Contest</option>
-                    <option value="Div. 1">Division 1</option>
-                    <option value="Div. 2">Division 2</option>
-                    <option value="Div. 3">Division 3</option>
-                    <option value="Educational">Educational</option>
-                    <option value="Global">Global Round</option>
-                  </select>
-                  <i class="fas fa-chevron-down select-arrow"></i>
-                </div>
+            <div class="filter-header">
+              <h3 class="filter-title">
+                <i class="fas fa-code"></i>
+                Codeforces Filters
+              </h3>
+              <div class="filter-controls">
+                <button class="toggle-btn" id="toggle-tags">
+                  <i class="fas fa-tags"></i>
+                  Hide Tags
+                </button>
               </div>
             </div>
-            <div class="filter-row">
-              <div class="filter-item">
-                <label class="filter-label">
-                  <i class="fas fa-signal"></i>
-                  Min Rating
-                </label>
-                <div class="input-container">
-                  <input
-                    type="number"
-                    id="cf-min-rating"
-                    placeholder="800"
-                    min="800"
-                    max="3500"
-                    value="800"
-                    step="100"
-                  />
-                  <span class="input-suffix">pts</span>
+            <div class="filter-grid-content">
+              <div class="filter-row">
+                <div class="filter-item">
+                  <label class="filter-label">
+                    <i class="fas fa-layer-group"></i>
+                    Problem Type
+                  </label>
+                  <div class="select-container">
+                    <select id="cf-problem-type">
+                      <option value="random">Random (A-G)</option>
+                      <option value="A">A - Implementation</option>
+                      <option value="B">B - Math & Logic</option>
+                      <option value="C">C - Data Structures</option>
+                      <option value="D">D - Algorithms</option>
+                      <option value="E">E - Advanced</option>
+                      <option value="F">F - Expert</option>
+                      <option value="G">G - Master</option>
+                    </select>
+                    <i class="fas fa-chevron-down select-arrow"></i>
+                  </div>
+                </div>
+                <div class="filter-item">
+                  <label class="filter-label">
+                    <i class="fas fa-trophy"></i>
+                    Contest Era
+                  </label>
+                  <div class="select-container">
+                    <select id="cf-contest-era">
+                      <option value="any">All Time</option>
+                      <option value="new">New Era (2021+)</option>
+                      <option value="old">Classic Era (Before 2021)</option>
+                    </select>
+                    <i class="fas fa-chevron-down select-arrow"></i>
+                  </div>
                 </div>
               </div>
-              <div class="filter-item">
-                <label class="filter-label">
-                  <i class="fas fa-signal"></i>
-                  Max Rating
-                </label>
-                <div class="input-container">
-                  <input
-                    type="number"
-                    id="cf-max-rating"
-                    placeholder="3500"
-                    min="800"
-                    max="3500"
-                    value="3500"
-                    step="100"
-                  />
-                  <span class="input-suffix">pts</span>
+              <div class="filter-row">
+                <div class="filter-item">
+                  <label class="filter-label">
+                    <i class="fas fa-medal"></i>
+                    Contest Type
+                  </label>
+                  <div class="select-container">
+                    <select id="cf-contest-type">
+                      <option value="any">Any Contest</option>
+                      <option value="Div. 1">Division 1</option>
+                      <option value="Div. 2">Division 2</option>
+                      <option value="Div. 3">Division 3</option>
+                      <option value="Educational">Educational</option>
+                      <option value="Global">Global Round</option>
+                    </select>
+                    <i class="fas fa-chevron-down select-arrow"></i>
+                  </div>
+                </div>
+                <div class="filter-item">
+                  <label class="filter-label">
+                    <i class="fas fa-chart-line"></i>
+                    Difficulty Range
+                  </label>
+                  <div class="range-container">
+                    <div class="range-input">
+                      <input
+                        type="number"
+                        id="cf-min-rating"
+                        placeholder="800"
+                        min="800"
+                        max="3500"
+                        value="800"
+                        step="100"
+                      />
+                      <span class="range-separator">—</span>
+                      <input
+                        type="number"
+                        id="cf-max-rating"
+                        placeholder="3500"
+                        min="800"
+                        max="3500"
+                        value="3500"
+                        step="100"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
