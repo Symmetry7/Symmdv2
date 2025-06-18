@@ -11,7 +11,9 @@ import {
   EyeOff,
   AlertCircle,
   ArrowLeft,
+  MessageCircle,
 } from "lucide-react";
+import ChatComponent from "../components/ChatComponent";
 
 function ActiveContestPage() {
   const { contestId } = useParams();
@@ -22,6 +24,7 @@ function ActiveContestPage() {
   const [submissions, setSubmissions] = useState({});
   const [showTags, setShowTags] = useState({});
   const [showToast, setShowToast] = useState(null);
+  const [showChat, setShowChat] = useState(false);
 
   useEffect(() => {
     // Mock contest data - in real app, fetch from API/localStorage
@@ -360,11 +363,25 @@ function ActiveContestPage() {
               </div>
 
               <div className="text-right">
-                <div className="flex items-center gap-2 mb-2">
-                  <Clock className="w-5 h-5 text-primary-500" />
-                  <span className="text-2xl font-mono font-bold text-primary-500">
-                    {formatTime(timeLeft)}
-                  </span>
+                <div className="flex items-center gap-4 mb-2">
+                  <button
+                    onClick={() => setShowChat(!showChat)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                      showChat
+                        ? "bg-primary-500 text-white"
+                        : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                    }`}
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Chat
+                  </button>
+
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-primary-500" />
+                    <span className="text-2xl font-mono font-bold text-primary-500">
+                      {formatTime(timeLeft)}
+                    </span>
+                  </div>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {solvedCount}/{contest.problems.length} solved
@@ -748,6 +765,13 @@ function ActiveContestPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Chat Component */}
+      <ChatComponent
+        contestId={contestId}
+        isVisible={showChat}
+        onToggle={() => setShowChat(!showChat)}
+      />
     </div>
   );
 }
