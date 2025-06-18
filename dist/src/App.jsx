@@ -3,18 +3,20 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
 import NotificationBanner from "./components/NotificationBanner";
-import OnboardingPage from "./pages/OnboardingPage";
+import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import HomePage from "./pages/HomePage";
 import ContestsPage from "./pages/ContestsPage";
 import CreateContestPage from "./pages/CreateContestPage";
+import ActiveContestPage from "./pages/ActiveContestPage";
 import StatsPage from "./pages/StatsPage";
 import BackgroundElements from "./components/BackgroundElements";
 import { AppProvider } from "./context/AppContext";
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
-  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -26,10 +28,14 @@ function App() {
       setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
     }
 
-    // Check if user has completed onboarding
-    const savedHandles = localStorage.getItem("symmdiv2-handles");
+    // Check authentication status
+    const savedUser = localStorage.getItem("symmdiv2-user");
     const hasOnboarded = localStorage.getItem("symmdiv2-onboarded");
-    setHasCompletedOnboarding(!!savedHandles || !!hasOnboarded);
+
+    if (savedUser && hasOnboarded) {
+      setUser(JSON.parse(savedUser));
+      setIsAuthenticated(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -41,15 +47,23 @@ function App() {
     setDarkMode((prev) => !prev);
   };
 
-  const isOnboardingRoute = location.pathname === "/onboarding";
-  const shouldShowNavbar = hasCompletedOnboarding && !isOnboardingRoute;
+  const handleLogout = () => {
+    localStorage.removeItem("symmdiv2-user");
+    localStorage.removeItem("symmdiv2-onboarded");
+    localStorage.removeItem("symmdiv2-handles");
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+
+  const isLoginRoute = location.pathname === "/login";
+  const shouldShowNavbar = isAuthenticated && !isLoginRoute;
 
   // Debug logging for development
   useEffect(() => {
     console.log("Current route:", location.pathname);
-    console.log("Has completed onboarding:", hasCompletedOnboarding);
+    console.log("Is authenticated:", isAuthenticated);
     console.log("Should show navbar:", shouldShowNavbar);
-  }, [location.pathname, hasCompletedOnboarding, shouldShowNavbar]);
+  }, [location.pathname, isAuthenticated, shouldShowNavbar]);
 
   return (
     <AppProvider>
@@ -62,25 +76,34 @@ function App() {
       >
         <BackgroundElements />
         {shouldShowNavbar && (
-          <Navbar darkMode={darkMode} toggleTheme={toggleTheme} />
+          <Navbar
+            darkMode={darkMode}
+            toggleTheme={toggleTheme}
+            user={user}
+            onLogout={handleLogout}
+          />
         )}
         {shouldShowNavbar && <NotificationBanner />}
 
         <main className="relative z-10">
           <AnimatePresence mode="wait">
             <Routes>
-              {/* Onboarding Route */}
+              {/* Login Route */}
               <Route
-                path="/onboarding"
+                path="/login"
                 element={
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <OnboardingPage />
-                  </motion.div>
+                  !isAuthenticated ? (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <LoginPage />
+                    </motion.div>
+                  ) : (
+                    <Navigate to="/dashboard" replace />
+                  )
                 }
               />
 
@@ -88,7 +111,7 @@ function App() {
               <Route
                 path="/dashboard"
                 element={
-                  hasCompletedOnboarding ? (
+                  isAuthenticated ? (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -98,7 +121,7 @@ function App() {
                       <DashboardPage />
                     </motion.div>
                   ) : (
-                    <Navigate to="/onboarding" replace />
+                    <Navigate to="/login" replace />
                   )
                 }
               />
@@ -106,7 +129,7 @@ function App() {
               <Route
                 path="/generator"
                 element={
-                  hasCompletedOnboarding ? (
+                  isAuthenticated ? (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -116,7 +139,7 @@ function App() {
                       <HomePage />
                     </motion.div>
                   ) : (
-                    <Navigate to="/onboarding" replace />
+                    <Navigate to="/login" replace />
                   )
                 }
               />
@@ -124,7 +147,7 @@ function App() {
               <Route
                 path="/contests"
                 element={
-                  hasCompletedOnboarding ? (
+                  isAuthenticated ? (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -134,7 +157,7 @@ function App() {
                       <ContestsPage />
                     </motion.div>
                   ) : (
-                    <Navigate to="/onboarding" replace />
+                    <Navigate to="/login" replace />
                   )
                 }
               />
@@ -142,7 +165,7 @@ function App() {
               <Route
                 path="/contests/create"
                 element={
-                  hasCompletedOnboarding ? (
+                  isAuthenticated ? (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -152,7 +175,25 @@ function App() {
                       <CreateContestPage />
                     </motion.div>
                   ) : (
-                    <Navigate to="/onboarding" replace />
+                    <Navigate to="/login" replace />
+                  )
+                }
+              />
+
+              <Route
+                path="/contests/:contestId/participate"
+                element={
+                  isAuthenticated ? (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ActiveContestPage />
+                    </motion.div>
+                  ) : (
+                    <Navigate to="/login" replace />
                   )
                 }
               />
@@ -160,7 +201,7 @@ function App() {
               <Route
                 path="/stats"
                 element={
-                  hasCompletedOnboarding ? (
+                  isAuthenticated ? (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -170,7 +211,7 @@ function App() {
                       <StatsPage />
                     </motion.div>
                   ) : (
-                    <Navigate to="/onboarding" replace />
+                    <Navigate to="/login" replace />
                   )
                 }
               />
@@ -180,7 +221,7 @@ function App() {
                 path="/"
                 element={
                   <Navigate
-                    to={hasCompletedOnboarding ? "/dashboard" : "/onboarding"}
+                    to={isAuthenticated ? "/dashboard" : "/login"}
                     replace
                   />
                 }
@@ -191,7 +232,7 @@ function App() {
                 path="*"
                 element={
                   <Navigate
-                    to={hasCompletedOnboarding ? "/dashboard" : "/onboarding"}
+                    to={isAuthenticated ? "/dashboard" : "/login"}
                     replace
                   />
                 }
