@@ -467,20 +467,22 @@ function ActiveContestPage() {
 
                     {/* Problem Actions */}
                     <div className="flex flex-wrap gap-4">
-                      <button
+                      <motion.button
                         onClick={() =>
                           handleSubmit(
                             contest.problems[currentProblem].id,
                             contest.problems[currentProblem].url,
                           )
                         }
-                        className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 text-white rounded-lg font-medium transition-all duration-200"
+                        className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         <ExternalLink className="w-4 h-4" />
                         Submit Solution
-                      </button>
+                      </motion.button>
 
-                      <button
+                      <motion.button
                         onClick={() =>
                           markAsSolved(contest.problems[currentProblem].id)
                         }
@@ -488,23 +490,40 @@ function ActiveContestPage() {
                           submissions[contest.problems[currentProblem].id]
                             ?.solved
                         }
-                        className="flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
+                        className="flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors shadow-lg hover:shadow-xl"
+                        whileHover={
+                          !submissions[contest.problems[currentProblem].id]
+                            ?.solved
+                            ? { scale: 1.05, y: -2 }
+                            : {}
+                        }
+                        whileTap={
+                          !submissions[contest.problems[currentProblem].id]
+                            ?.solved
+                            ? { scale: 0.95 }
+                            : {}
+                        }
                       >
                         <Flag className="w-4 h-4" />
-                        Mark as Solved
-                      </button>
+                        {submissions[contest.problems[currentProblem].id]
+                          ?.solved
+                          ? "Solved ✓"
+                          : "Mark as Solved"}
+                      </motion.button>
 
-                      <button
+                      <motion.button
                         onClick={() =>
                           handleViewProblem(
                             contest.problems[currentProblem].url,
                           )
                         }
-                        className="flex items-center gap-2 px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg font-medium transition-colors"
+                        className="flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors shadow-lg hover:shadow-xl"
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         <ExternalLink className="w-4 h-4" />
-                        View Problem
-                      </button>
+                        View Problem (Full Screen)
+                      </motion.button>
                     </div>
 
                     {/* Problem Navigation */}
