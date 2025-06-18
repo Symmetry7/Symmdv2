@@ -233,11 +233,26 @@ function ProblemCard({ problem, compact = false, onNextProblem }) {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: index * 0.05, duration: 0.2 }}
-                    className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-lg text-sm font-medium hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors cursor-pointer"
+                    className="group px-3 py-2 bg-gradient-to-r from-primary-100 to-primary-50 dark:from-primary-900/30 dark:to-primary-800/20 text-primary-700 dark:text-primary-300 rounded-xl text-sm font-medium hover:from-primary-200 hover:to-primary-100 dark:hover:from-primary-800/50 dark:hover:to-primary-700/30 transition-all duration-200 cursor-pointer border border-primary-200/50 dark:border-primary-700/50 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md"
+                    whileHover={{ scale: 1.05, y: -1 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    {tag}
+                    <span className="flex items-center gap-1">
+                      <span className="w-2 h-2 bg-primary-500 rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></span>
+                      {tag}
+                    </span>
                   </motion.span>
                 ))}
+              </motion.div>
+            )}
+
+            {!showTags && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-4 text-gray-500 dark:text-gray-400 italic"
+              >
+                Tags are hidden. Click "Show Tags" to reveal algorithm topics.
               </motion.div>
             )}
           </div>
