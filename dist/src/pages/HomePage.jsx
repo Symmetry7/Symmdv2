@@ -17,7 +17,7 @@ import { useApp } from "../context/AppContext";
 import UserHandleSection from "../components/UserHandleSection";
 import PlatformTabs from "../components/PlatformTabs";
 import FilterSection from "../components/FilterSection";
-import TagsSection from "../components/TagsSection";
+import TagInput from "../components/TagInput";
 import ProblemCard from "../components/ProblemCard";
 import LoadingSpinner from "../components/LoadingSpinner";
 
@@ -216,8 +216,28 @@ function HomePage() {
         {/* Filter Section */}
         <FilterSection showTags={showTags} setShowTags={setShowTags} />
 
-        {/* Tags Section */}
-        <AnimatePresence>{showTags && <TagsSection />}</AnimatePresence>
+        {/* Tags Input */}
+        <AnimatePresence>
+          {showTags && (
+            <motion.div
+              className="mb-8"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="glass dark:glass-dark rounded-2xl border border-white/20 dark:border-gray-700/20 p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <Tags className="w-6 h-6 text-accent-500" />
+                  <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+                    Algorithm Tags & Topics
+                  </h3>
+                </div>
+                <TagInput />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Generate Button */}
         <motion.div
