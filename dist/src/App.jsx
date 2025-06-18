@@ -178,6 +178,17 @@ function App() {
                   />
                 }
               />
+
+              {/* Catch-all route for 404s */}
+              <Route
+                path="*"
+                element={
+                  <Navigate
+                    to={hasCompletedOnboarding ? "/dashboard" : "/onboarding"}
+                    replace
+                  />
+                }
+              />
             </Routes>
           </AnimatePresence>
         </main>
