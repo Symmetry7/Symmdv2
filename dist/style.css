@@ -760,7 +760,7 @@ body.dark-theme .theme-toggle .fa-sun {
   backdrop-filter: var(--blur-md);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-2xl);
-  padding: 2rem;
+  overflow: hidden;
   transition: var(--transition-normal);
 }
 
@@ -769,13 +769,49 @@ body.dark-theme .theme-toggle .fa-sun {
   box-shadow: var(--shadow-lg);
 }
 
+.tags-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.tags-controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tag-clear-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--error);
+  border: none;
+  border-radius: var(--radius-lg);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  opacity: 0.8;
+}
+
+.tag-clear-btn:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
 .tag-logic {
   background: var(--accent-primary);
   color: white;
   font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--radius-sm);
-  margin-left: 0.5rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-md);
+  margin-left: 0.75rem;
+  font-weight: 600;
 }
 
 .tags-container {
