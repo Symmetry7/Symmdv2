@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   ExternalLink,
@@ -16,7 +16,14 @@ import {
 } from "lucide-react";
 
 function ProblemCard({ problem, compact = false, onNextProblem }) {
-  const [showTags, setShowTags] = useState(true);
+  const [showTags, setShowTags] = useState(() => {
+    const saved = localStorage.getItem("symmdiv2-show-tags");
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("symmdiv2-show-tags", JSON.stringify(showTags));
+  }, [showTags]);
 
   if (!problem) return null;
 
