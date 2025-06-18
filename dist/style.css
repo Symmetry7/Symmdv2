@@ -824,7 +824,7 @@ body.dark-theme .theme-toggle .fa-sun {
 }
 
 .tag-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   background: var(--bg-secondary);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-lg);
@@ -834,6 +834,25 @@ body.dark-theme .theme-toggle .fa-sun {
   cursor: pointer;
   transition: var(--transition-fast);
   user-select: none;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.tag-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: var(--transition-normal);
 }
 
 .tag-btn:hover {
@@ -841,6 +860,11 @@ body.dark-theme .theme-toggle .fa-sun {
   color: white;
   border-color: var(--accent-primary);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.tag-btn:hover::before {
+  left: 100%;
 }
 
 .tag-btn.selected {
@@ -851,7 +875,8 @@ body.dark-theme .theme-toggle .fa-sun {
   );
   color: white;
   border-color: var(--accent-primary);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
 }
 
 /* ===== USER SECTION ===== */
