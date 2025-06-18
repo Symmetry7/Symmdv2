@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Sun, Moon, Zap, Home, Target, BarChart3, Trophy } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Sun,
+  Moon,
+  Zap,
+  Home,
+  Target,
+  BarChart3,
+  Trophy,
+  User,
+  LogOut,
+  ChevronDown,
+} from "lucide-react";
 
-function Navbar({ darkMode, toggleTheme }) {
+function Navbar({ darkMode, toggleTheme, user, onLogout }) {
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const location = useLocation();
 
   const navItems = [
@@ -75,19 +87,88 @@ function Navbar({ darkMode, toggleTheme }) {
             })}
           </div>
 
-          {/* Theme Toggle */}
-          <motion.button
-            onClick={toggleTheme}
-            className="p-2 rounded-xl bg-gray-200/50 dark:bg-gray-700/50 hover:bg-gray-300/50 dark:hover:bg-gray-600/50 transition-all duration-200"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {darkMode ? (
-              <Sun className="w-5 h-5 text-yellow-500" />
-            ) : (
-              <Moon className="w-5 h-5 text-blue-600" />
+          {/* Right Section */}
+          <div className="flex items-center space-x-3">
+            {/* Theme Toggle */}
+            <motion.button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl bg-gray-200/50 dark:bg-gray-700/50 hover:bg-gray-300/50 dark:hover:bg-gray-600/50 transition-all duration-200"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {darkMode ? (
+                <Sun className="w-5 h-5 text-yellow-500" />
+              ) : (
+                <Moon className="w-5 h-5 text-blue-600" />
+              )}
+            </motion.button>
+
+            {/* User Menu */}
+            {user && (
+              <div className="relative">
+                <motion.button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 p-2 rounded-xl bg-gray-200/50 dark:bg-gray-700/50 hover:bg-gray-300/50 dark:hover:bg-gray-600/50 transition-all duration-200"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <img
+                    src={
+                      user.photoURL ||
+                      "https://ui-avatars.com/api/?name=" +
+                        encodeURIComponent(user.displayName || "User") +
+                        "&background=6366f1&color=fff"
+                    }
+                    alt={user.displayName || "User"}
+                    className="w-6 h-6 rounded-full"
+                  />
+                  <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {user.displayName || "User"}
+                  </span>
+                  <ChevronDown className="w-4 h-4 text-gray-500" />
+                </motion.button>
+
+                <AnimatePresence>
+                  {showUserMenu && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50"
+                    >
+                      <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                          {user.displayName || "User"}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {user.email}
+                        </p>
+                      </div>
+
+                      <Link to="/profile" className="block">
+                        <div className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                          <User className="w-4 h-4 mr-2" />
+                          Profile Settings
+                        </div>
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false);
+                          onLogout();
+                        }}
+                        className="w-full flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Sign Out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             )}
-          </motion.button>
+          </div>
         </div>
       </div>
     </nav>
