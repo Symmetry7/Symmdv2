@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Target,
   Code,
-  Laptop,
-  ChefHat,
+  Monitor,
+  UtensilsCrossed,
   TrendingUp,
   Clock,
   CheckCircle,
@@ -151,8 +151,8 @@ function PracticePage() {
 
   const platformIcons = {
     codeforces: { icon: Code, color: "text-blue-500" },
-    leetcode: { icon: Laptop, color: "text-orange-500" },
-    codechef: { icon: ChefHat, color: "text-amber-600" },
+    leetcode: { icon: Monitor, color: "text-orange-500" },
+    codechef: { icon: UtensilsCrossed, color: "text-amber-600" },
   };
 
   useEffect(() => {
