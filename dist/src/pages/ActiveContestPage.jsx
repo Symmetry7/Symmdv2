@@ -135,9 +135,44 @@ function ActiveContestPage() {
     return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
+  const openProblemFullScreen = (problemUrl) => {
+    // Open problem in full screen with maximum window size
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+
+    const windowFeatures = [
+      `width=${screenWidth}`,
+      `height=${screenHeight}`,
+      "left=0",
+      "top=0",
+      "fullscreen=yes",
+      "scrollbars=yes",
+      "resizable=yes",
+      "status=no",
+      "toolbar=no",
+      "menubar=no",
+      "location=yes",
+    ].join(",");
+
+    const newWindow = window.open(problemUrl, "_blank", windowFeatures);
+
+    // Try to maximize the window if possible
+    if (newWindow) {
+      try {
+        newWindow.moveTo(0, 0);
+        newWindow.resizeTo(screenWidth, screenHeight);
+        newWindow.focus();
+      } catch (e) {
+        console.log("Could not maximize window:", e);
+      }
+    }
+
+    return newWindow;
+  };
+
   const handleSubmit = (problemId, problemUrl) => {
-    // Redirect to the platform's submit page
-    window.open(problemUrl, "_blank");
+    // Open the platform's submit page in full screen
+    openProblemFullScreen(problemUrl);
 
     // Mark as attempted
     setSubmissions((prev) => ({
@@ -148,6 +183,11 @@ function ActiveContestPage() {
         lastAttempt: Date.now(),
       },
     }));
+  };
+
+  const handleViewProblem = (problemUrl) => {
+    // Open problem in full screen
+    openProblemFullScreen(problemUrl);
   };
 
   const markAsSolved = (problemId) => {
@@ -454,15 +494,17 @@ function ActiveContestPage() {
                         Mark as Solved
                       </button>
 
-                      <a
-                        href={contest.problems[currentProblem].url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        onClick={() =>
+                          handleViewProblem(
+                            contest.problems[currentProblem].url,
+                          )
+                        }
                         className="flex items-center gap-2 px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg font-medium transition-colors"
                       >
                         <ExternalLink className="w-4 h-4" />
                         View Problem
-                      </a>
+                      </button>
                     </div>
 
                     {/* Problem Navigation */}
