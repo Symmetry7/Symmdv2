@@ -94,14 +94,37 @@ function ProblemCard({ problem, compact = false, onNextProblem }) {
               {formatNumber(problem.solvedCount || 0)}
             </div>
           </div>
-          <a
-            href={problem.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-3 py-1 bg-primary-500 text-white rounded-lg text-xs font-medium hover:bg-primary-600 transition-colors"
-          >
-            Solve
-          </a>
+          <div className="flex items-center gap-2">
+            <a
+              href={problem.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1 bg-primary-500 text-white rounded-lg text-xs font-medium hover:bg-primary-600 transition-colors"
+            >
+              Solve
+            </a>
+            {onNextProblem && (
+              <button
+                onClick={onNextProblem}
+                className="px-2 py-1 bg-green-500 text-white rounded-lg text-xs font-medium hover:bg-green-600 transition-colors"
+                title="Next Problem"
+              >
+                <svg
+                  className="w-3 h-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
       </motion.div>
     );
