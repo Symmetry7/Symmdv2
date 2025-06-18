@@ -7,14 +7,18 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-// Firebase configuration - Replace with your actual config
+// Firebase configuration - For production, use environment variables
 const firebaseConfig = {
-  apiKey: "demo-api-key",
-  authDomain: "symmdiv2-plus.firebaseapp.com",
-  projectId: "symmdiv2-plus",
-  storageBucket: "symmdiv2-plus.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:demo",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDemoKey123456789",
+  authDomain:
+    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ||
+    "symmdiv2-plus.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "symmdiv2-plus",
+  storageBucket:
+    import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "symmdiv2-plus.appspot.com",
+  messagingSenderId:
+    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:demo",
 };
 
 // Initialize Firebase

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
+import authService from "../services/authService";
 
 function GoogleAuthButton({ onSuccess, onError, className = "" }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -9,23 +10,15 @@ function GoogleAuthButton({ onSuccess, onError, className = "" }) {
     setIsLoading(true);
 
     try {
-      // Mock Google sign in for development
-      // In production, this would use the actual Firebase auth
-      const mockUser = {
-        uid: `user_${Date.now()}`,
-        email: "user@example.com",
-        displayName: "Demo User",
-        photoURL:
-          "https://ui-avatars.com/api/?name=Demo+User&background=6366f1&color=fff",
-      };
+      const result = await authService.signInWithGoogle();
 
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Save user to localStorage
-      localStorage.setItem("symmdiv2-user", JSON.stringify(mockUser));
-
-      onSuccess && onSuccess(mockUser);
+      if (result.success) {
+        // Save user to localStorage
+        localStorage.setItem("symmdiv2-user", JSON.stringify(result.user));
+        onSuccess && onSuccess(result.user);
+      } else {
+        throw new Error(result.error || "Sign in failed");
+      }
     } catch (error) {
       console.error("Sign in error:", error);
       onError && onError(error.message || "Sign in failed");
