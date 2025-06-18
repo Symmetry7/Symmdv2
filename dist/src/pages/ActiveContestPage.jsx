@@ -621,6 +621,36 @@ function ActiveContestPage() {
           </motion.div>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: 50, x: "-50%" }}
+            className="fixed bottom-6 left-1/2 transform z-50"
+          >
+            <div
+              className={`px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 ${
+                showToast.type === "success"
+                  ? "bg-green-500 text-white"
+                  : showToast.type === "warning"
+                    ? "bg-yellow-500 text-white"
+                    : "bg-blue-500 text-white"
+              }`}
+            >
+              {showToast.type === "success" && (
+                <CheckCircle className="w-5 h-5" />
+              )}
+              {showToast.type === "warning" && (
+                <AlertCircle className="w-5 h-5" />
+              )}
+              <span className="font-medium">{showToast.message}</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
