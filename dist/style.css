@@ -683,6 +683,47 @@ body.dark-theme .theme-toggle .fa-sun {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+.range-container {
+  width: 100%;
+}
+
+.range-input {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: 0.5rem;
+  transition: var(--transition-normal);
+}
+
+.range-input:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.range-input input {
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+}
+
+.range-input input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.range-separator {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
 .input-suffix {
   position: absolute;
   right: 1rem;
