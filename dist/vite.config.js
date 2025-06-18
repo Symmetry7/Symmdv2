@@ -7,10 +7,15 @@ export default defineConfig({
     port: 3000,
     host: true,
     open: false,
+    historyApiFallback: true,
   },
   build: {
     outDir: "build",
     assetsDir: "assets",
     emptyOutDir: true,
+  },
+  preview: {
+    port: 3000,
+    host: true,
   },
 });
