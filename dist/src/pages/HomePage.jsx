@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import apiServices from "../services/apiServices";
 import UserHandleSection from "../components/UserHandleSection";
 import PlatformTabs from "../components/PlatformTabs";
 import FilterSection from "../components/FilterSection";
@@ -42,75 +43,34 @@ function HomePage() {
     dispatch({ type: "SET_LOADING", payload: true });
 
     try {
-      // Simulate API calls with mock data for now
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      let problemsData;
 
-      const mockProblems = generateMockProblems(state.currentPlatform);
+      switch (state.currentPlatform) {
+        case "codeforces":
+          problemsData = await apiServices.fetchCodeforcesProblems();
+          break;
+        case "leetcode":
+          problemsData = await apiServices.fetchLeetCodeProblems();
+          break;
+        case "codechef":
+          problemsData = await apiServices.fetchCodeChefProblems();
+          break;
+        default:
+          problemsData = { problems: [], count: 0 };
+      }
+
       dispatch({
         type: "SET_PROBLEMS",
         platform: state.currentPlatform,
-        payload: mockProblems,
+        payload: problemsData.problems,
       });
 
-      filterProblems(mockProblems);
+      filterProblems(problemsData.problems);
     } catch (error) {
       console.error("Error loading platform data:", error);
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
-
-  const generateMockProblems = (platform) => {
-    const problems = [];
-    const count =
-      platform === "codeforces" ? 500 : platform === "leetcode" ? 300 : 200;
-
-    for (let i = 1; i <= count; i++) {
-      const problem = {
-        id: i,
-        platform,
-        title: `${platform.charAt(0).toUpperCase() + platform.slice(1)} Problem ${i}`,
-        rating: 800 + Math.floor(Math.random() * 2000),
-        solvedCount: Math.floor(Math.random() * 50000) + 1000,
-        tags: getRandomTags(platform),
-        url: `https://${platform}.com/problem/${i}`,
-      };
-
-      if (platform === "codeforces") {
-        problem.index = ["A", "B", "C", "D", "E", "F", "G"][
-          Math.floor(Math.random() * 7)
-        ];
-        problem.contestId = 1000 + Math.floor(Math.random() * 1000);
-        problem.contestName = `Codeforces Round #${problem.contestId}`;
-        problem.year = 2018 + Math.floor(Math.random() * 7);
-      } else if (platform === "leetcode") {
-        problem.difficulty = ["Easy", "Medium", "Hard"][
-          Math.floor(Math.random() * 3)
-        ];
-        problem.isPremium = Math.random() < 0.3;
-      } else if (platform === "codechef") {
-        problem.difficulty = [
-          "beginner",
-          "easy",
-          "medium",
-          "hard",
-          "challenge",
-        ][Math.floor(Math.random() * 5)];
-        problem.contestStatus = ["practice", "past", "present"][
-          Math.floor(Math.random() * 3)
-        ];
-      }
-
-      problems.push(problem);
-    }
-
-    return problems;
-  };
-
-  const getRandomTags = (platform) => {
-    const allTags = state.platforms[platform].tags;
-    const count = 1 + Math.floor(Math.random() * 4);
-    return allTags.sort(() => 0.5 - Math.random()).slice(0, count);
   };
 
   const filterProblems = (problems = null) => {
