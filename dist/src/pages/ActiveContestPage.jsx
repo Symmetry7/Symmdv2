@@ -597,7 +597,7 @@ function ActiveContestPage() {
                         whileTap={{ scale: 0.95 }}
                       >
                         <ExternalLink className="w-4 h-4" />
-                        View Problem (Full Screen)
+                        View Problem
                       </motion.button>
                     </div>
 
