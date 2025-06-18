@@ -43,7 +43,9 @@ function HomePage() {
     dispatch({ type: "SET_LOADING", payload: true });
 
     try {
-      let problemsData;
+      let problemsData = { problems: [], count: 0 };
+
+      console.log(`Loading ${state.currentPlatform} problems...`);
 
       switch (state.currentPlatform) {
         case "codeforces":
@@ -56,18 +58,38 @@ function HomePage() {
           problemsData = await apiServices.fetchCodeChefProblems();
           break;
         default:
+          console.warn("Unknown platform:", state.currentPlatform);
           problemsData = { problems: [], count: 0 };
       }
 
+      if (problemsData && problemsData.problems) {
+        dispatch({
+          type: "SET_PROBLEMS",
+          platform: state.currentPlatform,
+          payload: problemsData.problems,
+        });
+
+        console.log(
+          `Loaded ${problemsData.problems.length} problems for ${state.currentPlatform}`,
+        );
+        filterProblems(problemsData.problems);
+      } else {
+        console.warn("No problems data received for", state.currentPlatform);
+        dispatch({
+          type: "SET_PROBLEMS",
+          platform: state.currentPlatform,
+          payload: [],
+        });
+      }
+    } catch (error) {
+      console.error(`Error loading ${state.currentPlatform} data:`, error);
+
+      // Ensure we still set empty array to prevent undefined errors
       dispatch({
         type: "SET_PROBLEMS",
         platform: state.currentPlatform,
-        payload: problemsData.problems,
+        payload: [],
       });
-
-      filterProblems(problemsData.problems);
-    } catch (error) {
-      console.error("Error loading platform data:", error);
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
