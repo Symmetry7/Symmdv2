@@ -934,13 +934,15 @@ body.dark-theme .theme-toggle .fa-sun {
 /* ===== GENERATE SECTION ===== */
 .generate-section {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   margin-top: 2rem;
 }
 
 .generate-btn {
   position: relative;
-  padding: 1.25rem 3rem;
+  padding: 1.5rem 4rem;
   background: linear-gradient(
     135deg,
     var(--accent-primary),
@@ -949,21 +951,39 @@ body.dark-theme .theme-toggle .fa-sun {
   border: none;
   border-radius: var(--radius-2xl);
   color: white;
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 700;
   cursor: pointer;
   transition: var(--transition-normal);
   overflow: hidden;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-xl);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .generate-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
 }
 
 .generate-btn:active {
-  transform: translateY(0);
+  transform: translateY(-1px);
+}
+
+.generate-stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.filtered-count {
+  background: var(--bg-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-primary);
 }
 
 .btn-content {
