@@ -28,49 +28,40 @@ function DashboardPage() {
       setUserHandles(JSON.parse(savedHandles));
     }
 
-    // Mock recent activity
-    setRecentActivity([
-      {
-        type: "problem_solved",
-        platform: "codeforces",
-        problem: "1A - Theatre Square",
-        time: "2 hours ago",
-      },
-      {
-        type: "contest_created",
-        name: "Weekly Practice #1",
-        participants: 5,
-        time: "1 day ago",
-      },
-      {
-        type: "problem_solved",
-        platform: "leetcode",
-        problem: "1. Two Sum",
-        time: "2 days ago",
-      },
-    ]);
+    // Load actual recent activity from localStorage
+    const savedActivity = localStorage.getItem("symmdiv2-activity");
+    if (savedActivity) {
+      setRecentActivity(JSON.parse(savedActivity));
+    } else {
+      // Show sample activity for new users
+      setRecentActivity([
+        {
+          type: "contest_created",
+          name: "Welcome Contest",
+          participants: 1,
+          time: "Just now",
+        },
+      ]);
+    }
 
-    // Mock upcoming contests
-    setUpcomingContests([
-      {
-        name: "Codeforces Round #912",
-        platform: "codeforces",
-        time: "Tomorrow 14:30",
-        duration: "2h",
-      },
-      {
-        name: "LeetCode Weekly Contest 375",
-        platform: "leetcode",
-        time: "Sunday 09:30",
-        duration: "1.5h",
-      },
-      {
-        name: "CodeChef Cook-Off",
-        platform: "codechef",
-        time: "Next Week",
-        duration: "2.5h",
-      },
-    ]);
+    // Load user's contests as upcoming activities
+    const savedContests = localStorage.getItem("symmdiv2-contests");
+    if (savedContests) {
+      const userContests = JSON.parse(savedContests);
+      const activeContests = userContests.filter(
+        (contest) => contest.status === "active" || contest.status === "draft",
+      );
+      setUpcomingContests(
+        activeContests.map((contest) => ({
+          name: contest.title,
+          platform: "custom",
+          time: contest.status === "active" ? "Ready to start" : "Draft",
+          duration: contest.duration,
+        })),
+      );
+    } else {
+      setUpcomingContests([]);
+    }
   }, []);
 
   const quickActions = [
@@ -106,35 +97,52 @@ function DashboardPage() {
 
   const statsCards = [
     {
-      title: "Problems Solved",
-      value: Object.values(state.platforms).reduce(
-        (sum, platform) => sum + platform.userSolvedProblems.size,
-        0,
-      ),
-      icon: TrendingUp,
-      color: "text-green-500",
-      change: "+12 this week",
-    },
-    {
-      title: "Current Streak",
-      value: "7 days",
-      icon: Target,
-      color: "text-blue-500",
-      change: "Keep it up!",
-    },
-    {
       title: "Contests Created",
-      value: "3",
+      value: (() => {
+        const saved = localStorage.getItem("symmdiv2-contests");
+        return saved ? JSON.parse(saved).length : 0;
+      })(),
       icon: Trophy,
       color: "text-purple-500",
-      change: "+1 this month",
+      change: "Total created",
     },
     {
-      title: "Total Practice Time",
-      value: "24h",
+      title: "Active Contests",
+      value: (() => {
+        const saved = localStorage.getItem("symmdiv2-contests");
+        if (!saved) return 0;
+        return JSON.parse(saved).filter((c) => c.status === "active").length;
+      })(),
+      icon: Target,
+      color: "text-green-500",
+      change: "Ready to start",
+    },
+    {
+      title: "Connected Platforms",
+      value: Object.keys(userHandles).length,
+      icon: TrendingUp,
+      color: "text-blue-500",
+      change: "Platforms linked",
+    },
+    {
+      title: "Days Active",
+      value: (() => {
+        const joined = localStorage.getItem("symmdiv2-joined-date");
+        if (!joined) {
+          localStorage.setItem(
+            "symmdiv2-joined-date",
+            new Date().toISOString(),
+          );
+          return 1;
+        }
+        const daysDiff = Math.floor(
+          (new Date() - new Date(joined)) / (1000 * 60 * 60 * 24),
+        );
+        return Math.max(1, daysDiff);
+      })(),
       icon: Clock,
       color: "text-orange-500",
-      change: "+4h this week",
+      change: "Since joining",
     },
   ];
 
