@@ -5,7 +5,7 @@ import {
   Code,
   Laptop,
   ChefHat,
-  Bolt,
+  Zap,
   Search,
   User,
   Tags,
@@ -231,7 +231,7 @@ function HomePage() {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-primary-700 to-accent-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative flex items-center gap-3">
-              <Bolt className="w-6 h-6" />
+              <Zap className="w-6 h-6" />
               Generate Perfect Problem
             </div>
             <div className="absolute inset-0 -top-2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-700" />
