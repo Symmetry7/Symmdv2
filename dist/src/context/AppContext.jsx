@@ -105,6 +105,7 @@ const initialState = {
   tagOrder: {},
   currentProblem: null,
   userHandle: "",
+  userHandles: {},
   filters: {
     codeforces: {
       problemType: "random",
@@ -171,6 +172,9 @@ function appReducer(state, action) {
 
     case "SET_USER_HANDLE":
       return { ...state, userHandle: action.payload };
+
+    case "SET_USER_HANDLES":
+      return { ...state, userHandles: action.payload };
 
     case "SET_USER_SOLVED_PROBLEMS":
       return {
