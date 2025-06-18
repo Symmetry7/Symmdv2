@@ -264,10 +264,31 @@ function HomePage() {
         {/* Problem Display */}
         <AnimatePresence mode="wait">
           {state.isLoading ? (
-            <LoadingSpinner />
+            <LoadingSpinner
+              message={`Loading ${state.currentPlatform.charAt(0).toUpperCase() + state.currentPlatform.slice(1)} problems...`}
+            />
           ) : state.currentProblem ? (
             <ProblemCard problem={state.currentProblem} />
-          ) : null}
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-12"
+            >
+              <div className="glass dark:glass-dark rounded-2xl border border-white/20 dark:border-gray-700/20 p-8">
+                <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                  Ready to Practice! 🚀
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  Click "Generate Perfect Problem" to start your coding journey
+                </p>
+                <div className="text-sm text-gray-500 dark:text-gray-500">
+                  {state.platforms[state.currentPlatform].problems.length}{" "}
+                  problems loaded from {state.currentPlatform}
+                </div>
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
     </div>
