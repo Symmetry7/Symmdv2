@@ -30,6 +30,14 @@ function HomePage() {
     loadPlatformData();
   }, [state.currentPlatform]);
 
+  useEffect(() => {
+    // Listen for next problem events
+    const handleNextProblem = () => generateProblem();
+    window.addEventListener("generateNextProblem", handleNextProblem);
+    return () =>
+      window.removeEventListener("generateNextProblem", handleNextProblem);
+  }, []);
+
   const loadPlatformData = async () => {
     dispatch({ type: "SET_LOADING", payload: true });
 
