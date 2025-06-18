@@ -1,0 +1,31 @@
+{
+  "name": "codeforces-problem-selector",
+  "version": "1.0.0",
+  "description": "A web application to help select and practice Codeforces problems with targeted Div 2 A-G problems",
+  "main": "dist/index.html",
+  "scripts": {
+    "dev": "npx http-server dist -p 3000 -c-1",
+    "build": "echo 'Build completed - files are already in dist/'",
+    "start": "npm run dev",
+    "preview": "npm run dev"
+  },
+  "keywords": [
+    "codeforces",
+    "competitive-programming",
+    "problem-selector",
+    "frontend",
+    "javascript"
+  ],
+  "author": "Symmetry",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "."
+  }
+}
