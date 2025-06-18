@@ -129,6 +129,53 @@ function ActiveContestPage() {
     }
   }, [contestId, submissions, currentProblem, timeLeft, contest]);
 
+  useEffect(() => {
+    // Keyboard shortcuts
+    const handleKeyPress = (event) => {
+      if (event.ctrlKey || event.metaKey) return; // Don't interfere with browser shortcuts
+
+      switch (event.key) {
+        case "ArrowLeft":
+          event.preventDefault();
+          setCurrentProblem((prev) => Math.max(0, prev - 1));
+          break;
+        case "ArrowRight":
+          event.preventDefault();
+          setCurrentProblem((prev) =>
+            Math.min((contest?.problems?.length || 1) - 1, prev + 1),
+          );
+          break;
+        case "v":
+          if (contest?.problems?.[currentProblem]) {
+            event.preventDefault();
+            handleViewProblem(contest.problems[currentProblem].url);
+          }
+          break;
+        case "s":
+          if (contest?.problems?.[currentProblem]) {
+            event.preventDefault();
+            handleSubmit(
+              contest.problems[currentProblem].id,
+              contest.problems[currentProblem].url,
+            );
+          }
+          break;
+        case "m":
+          if (
+            contest?.problems?.[currentProblem] &&
+            !submissions[contest.problems[currentProblem].id]?.solved
+          ) {
+            event.preventDefault();
+            markAsSolved(contest.problems[currentProblem].id);
+          }
+          break;
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+    return () => document.removeEventListener("keydown", handleKeyPress);
+  }, [contest, currentProblem, submissions]);
+
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
