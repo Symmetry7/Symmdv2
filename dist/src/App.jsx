@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
+import NotificationBanner from "./components/NotificationBanner";
 import HomePage from "./pages/HomePage";
 import PracticePage from "./pages/PracticePage";
 import StatsPage from "./pages/StatsPage";
@@ -41,6 +42,7 @@ function App() {
       >
         <BackgroundElements />
         <Navbar darkMode={darkMode} toggleTheme={toggleTheme} />
+        <NotificationBanner />
 
         <main className="relative z-10">
           <AnimatePresence mode="wait">
